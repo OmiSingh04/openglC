@@ -25,7 +25,7 @@ int main()
 		glfwTerminate();
 		return -1;
 	}
-	glfwMakeContextCurrent(window);	// Initialize GLEW
+	glfwMakeContextCurrent(window);
 	
 	if (glewInit() != GLEW_OK) {
     		fprintf(stderr, "Failed to initialize GLEW\n");

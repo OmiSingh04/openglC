@@ -1,0 +1,45 @@
+i will refer to OpenGL as ogl here. -_-
+
+
+Immediate mode vs core profile
+
+immediate mode was an easy to use method for drawing graphics. 
+most of the functionality was hidden and decelopers did not have much control over how OpenGL does its calculations.
+
+Developrs got hungry for more flexibility and over time the specifications became more flexible.
+
+the immediate mode is easy to use and understand, but very innefficient.
+
+the specification started to deprecate immediate mode functionality and started developers to develop in core-profile, which is a division of OpenGLs specification that removed all old deprecated functionality.
+
+
+ogl is a large state machine. a collection of variables decide how it should currently operate.
+
+the state of opengl is commonly referred to as OpenGL context.
+
+when using ogl, we often change its state by setting some options, manipulating buffers na drender then using the current context.
+
+now in my window.c program.
+
+i made a window, and set it as the current context.
+
+
+when we tell opengl that now we want to draw lines instead of rectangle, we change the state of ogl by changing some context variable. and then the next drawing commands will draw lines, instead of rectangles.
+
+we will come across many state-changing functions that change the context,
+and also several state-using functions that perform operations based on the current context.
+
+
+
+ogl is writtten in C
+many of c-language-constructs do not translate well in higher level languages, opengl was developed with several abstractions in mind.
+
+one of those are objects.
+
+objects in ogl is collection of options that represent a subset of opengls current state.
+
+we could have an ibject that represents the settings of the drawing window.
+we could then set its size, how many colors it supports and so on.
+
+
+
