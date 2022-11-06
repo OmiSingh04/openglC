@@ -1,4 +1,3 @@
-#define GLEW_STATIC
 #include<stdio.h>
 #include<stdbool.h>
 #include<GL/glew.h>
@@ -27,8 +26,9 @@ GLuint compile_shader(GLuint type, const char* source){//compile shader from sou
 		glDeleteShader(id);
 		id = 0;//just hoping 0 is an invalid 
 	}
-	else
-			fprintf(stderr, "Compiled Fragment Shader");
+	else{
+			fprintf(stderr, "Failed while compiling Fragment Shader");
+	}
 
 	char log[1024] = {0};
 	GLsizei log_length;
@@ -53,14 +53,13 @@ GLuint load_shaders(const char* vertex, const char* fragment){//returns the prog
 	
 
 	GLuint validate_status;
-	glGetProgramiv(program, GL_VALIDATE_STATUS, &validate_status);
+	glGetProgramiv(program, GL_LINK_STATUS, &validate_status);
 
-	if(validate_status == GL_FALSE)
+	if(validate_status == GL_FALSE){
+
 		fprintf(stderr, "Failed to validate program!");
 
-	
-
-
+	}
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
@@ -102,7 +101,7 @@ int main(void){
 
 	GLuint buffer;//id of the buffer
 	glGenBuffers(1, &buffer);
-	glBindBuffer(GL_ARRAY_BUFFER, buffer); //important function, cause this is how opengl knows that this buffer contains the vertex attributes
+	glBindBuffer(GL_ARRAY_BUFFER, buffer); //the most important function, cause this is how opengl knows that this buffer contains the vertex attributes
 
 
 	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
@@ -136,7 +135,7 @@ int main(void){
 
 	GLuint shader = load_shaders(vertex_shader, fragment_shader);
 	glUseProgram(shader);
- 
+
 
 	printf("%s\n\n%s\n\n", vertex_shader, fragment_shader);
 	

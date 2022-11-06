@@ -43,3 +43,16 @@ we could then set its size, how many colors it supports and so on.
 
 
 
+
+Vertex buffer - 
+bytes of memory in VRAM in the GPU
+then do a draw call to read from the buffer and draw on screen
+
+
+the gpu is provided the data of what we want to render
+then we use shader, a program to execute on the gpu which to read the data and display
+
+
+the two main shaders important to me are -
+vertex shader
+fragment shader (pixel shader)
