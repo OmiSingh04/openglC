@@ -1,8 +1,22 @@
+CC = gcc
 LIBRARIES = -lglfw -lGLEW -lGLU -lGL 
+CFLAGS = -Wall -Wextra
 
-all:
-	gcc window.c $(LIBRARIES) -o run.out
-	./run.out
+OBJECT_FILES = window.o
+C_FILES = window.c
+
+BINARY = run.out
+
+
+all: $(BINARY)
+	./$(BINARY)
+
+$(BINARY): $(OBJECT_FILES)
+	$(CC) -o $@ $^ $(LIBRARIES)
+
+$(OBJECT_FILES): $(C_FILES) 
+	$(CC) -c $^ -o $@ $(CFLAGS)
+	
 
 clean:
-	rm run.out
+	rm $(BINARY) $(OBJECT_FILES)
