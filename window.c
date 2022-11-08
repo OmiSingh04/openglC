@@ -5,7 +5,6 @@
 #include<GL/gl.h>
 #include<GLFW/glfw3.h>
 
-
 GLuint compile_shader(GLuint type, const char* source){//compile shader from source and return it
 
 	GLuint id = glCreateShader(type);
@@ -58,9 +57,6 @@ GLuint load_shaders(const char* vertex, const char* fragment){//returns the prog
 	if(validate_status == GL_FALSE)
 		fprintf(stderr, "Failed to validate program!");
 
-	
-
-
 	glDeleteShader(vertex_shader);
 	glDeleteShader(fragment_shader);
 
@@ -72,7 +68,6 @@ GLuint load_shaders(const char* vertex, const char* fragment){//returns the prog
 int main(void){
 	
 	glewExperimental = true;
-
 	if(!glfwInit())
 		return -1;//if GLFW couldnt init, just return bro
 
@@ -94,9 +89,9 @@ int main(void){
 
 	
 	GLfloat positions[6] = {
-		-0.5f, -0.5f,
-		0.0f, 0.5f,
-		0.5f, -0.5f
+	        0.5f, -0.5f,
+	        0.0f, 0.5f,
+	       -0.5f, -0.5f
 	};
 	
 
@@ -105,9 +100,9 @@ int main(void){
 	glBindBuffer(GL_ARRAY_BUFFER, buffer); //important function, cause this is how opengl knows that this buffer contains the vertex attributes
 
 
-	glBufferData(GL_ARRAY_BUFFER, 6 * sizeof(float), positions, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(positions), positions, GL_STATIC_DRAW);
 	
-	glEnableVertexAttribArray(buffer);
+	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
 	char vertex_shader[] = 
@@ -138,7 +133,6 @@ int main(void){
 	glUseProgram(shader);
  
 
-	printf("%s\n\n%s\n\n", vertex_shader, fragment_shader);
 	
 
 	while(!glfwWindowShouldClose(window)){
