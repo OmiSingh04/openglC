@@ -1,9 +1,36 @@
 #define GLEW_STATIC
 #include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 #include<stdbool.h>
 #include<GL/glew.h>
 #include<GL/gl.h>
 #include<GLFW/glfw3.h>
+
+
+char* parse_shader(const char *file_path){
+
+	FILE* shader_file = fopen(file_path, "r");
+
+	if(!shader_file){
+		fprintf(stderr, "File couldnt be opened - %s", file_path);
+		return NULL;
+	}
+	
+	fseek(shader_file, 0, SEEK_END);
+	long length = ftell(shader_file);
+	fseek(shader_file, 0, SEEK_SET);
+
+	char* buffer = malloc(sizeof(char) * (length + 1));
+
+	memset(buffer, 0, length + 1);
+	fread(buffer, sizeof(char), length, shader_file);
+
+
+	printf("%s", buffer);
+	
+	return buffer;
+}
 
 GLuint compile_shader(GLuint type, const char* source){//compile shader from source and return it
 
@@ -12,7 +39,7 @@ GLuint compile_shader(GLuint type, const char* source){//compile shader from sou
 	glCompileShader(id);//this is where the magic happens!
 	
 	//debug info
-	GLuint compile_status;
+	GLint compile_status;
 	glGetShaderiv(id, GL_COMPILE_STATUS, &compile_status);
 	
 	
@@ -26,8 +53,6 @@ GLuint compile_shader(GLuint type, const char* source){//compile shader from sou
 		glDeleteShader(id);
 		id = 0;//just hoping 0 is an invalid 
 	}
-	else
-			fprintf(stderr, "Compiled Fragment Shader");
 
 	char log[1024] = {0};
 	GLsizei log_length;
@@ -51,7 +76,7 @@ GLuint load_shaders(const char* vertex, const char* fragment){//returns the prog
 	glValidateProgram(program);
 	
 
-	GLuint validate_status;
+	GLint validate_status;
 	glGetProgramiv(program, GL_VALIDATE_STATUS, &validate_status);
 
 	if(validate_status == GL_FALSE)
@@ -105,35 +130,16 @@ int main(void){
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), 0);
 
-	char vertex_shader[] = 
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) in vec4 position;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	gl_Position = position;\n"
-		"}\n";
+	char *vertex_shader = parse_shader("res/shaders/basic.vert");
+	char *fragment_shader = parse_shader("res/shaders/basic.frag");
 
-
-
-	
-	char fragment_shader[] = 
-		"#version 330 core\n"
-		"\n"
-		"layout(location = 0) out vec4 color;\n"
-		"\n"
-		"void main()\n"
-		"{\n"
-		"	color = vec4(1.0, 0.0, 0.0, 1.0);\n"
-		"}\n";
 
 
 	GLuint shader = load_shaders(vertex_shader, fragment_shader);
 	glUseProgram(shader);
  
-
-	
+	free(vertex_shader);
+	free(fragment_shader);
 
 	while(!glfwWindowShouldClose(window)){
 		glClear(GL_COLOR_BUFFER_BIT);
